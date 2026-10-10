@@ -22,11 +22,7 @@ jobs:
           java-version: '17'
 
       - name: Extrair projeto Android
-        run: |
-          mkdir -p projeto
-          unzip -o alves-construcoes-android-main.zip -d projeto
-          find projeto -name settings.gradle.kts
-
+        run: unzip -o alves-construcoes-android-main-corrigido.zip -d projeto
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
 
