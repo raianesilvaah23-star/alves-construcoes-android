@@ -1,35 +1,38 @@
-
 name: Gerar APK Android
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+workflow_dispatch:
+push:
+branches:
+- main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+build:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Baixar projeto
-        uses: actions/checkout@v4
+steps:
+  - name: Baixar repositorio
+    uses: actions/checkout@v4
 
-      - name: Configurar Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+  - name: Configurar Java
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: '17'
 
-      - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@v4
+  - name: Extrair projeto Android
+    run: |
+      unzip -o alves-construcoes-android-main.zip -d projeto
 
-      - name: Gerar APK
-        run: gradle assembleDebug
+  - name: Configurar Gradle
+    uses: gradle/actions/setup-gradle@v4
 
-      - name: Disponibilizar APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Alves-Construcoes-Gestao-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
-          
+  - name: Gerar APK
+    working-directory: projeto/alves-construcoes-android-main
+    run: gradle assembleDebug
+
+  - name: Disponibilizar APK
+    uses: actions/upload-artifact@v4
+    with:
+      name: Alves-Construcoes-Gestao-APK
+      path: projeto/alves-construcoes-android-main/app/build/outputs/apk/debug/app-debug.apk
