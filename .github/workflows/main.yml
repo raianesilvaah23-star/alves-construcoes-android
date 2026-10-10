@@ -23,6 +23,7 @@ steps:
   - name: Extrair projeto Android
     run: |
       unzip -o alves-construcoes-android-main.zip -d projeto
+      ls -la projeto
 
   - name: Configurar Gradle
     uses: gradle/actions/setup-gradle@v4
