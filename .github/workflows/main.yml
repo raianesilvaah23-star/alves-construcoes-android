@@ -23,18 +23,23 @@ jobs:
 
       - name: Extrair projeto Android
         run: |
+          mkdir -p projeto
           unzip -o alves-construcoes-android-main.zip -d projeto
-          ls -la projeto
+          find projeto -name settings.gradle.kts
 
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Gerar APK
-        working-directory: projeto/alves-construcoes-android-main
-        run: gradle assembleDebug
+        run: |
+          PROJETO=$(find projeto -name settings.gradle.kts -printf '%h\n' | head -n 1)
+          echo "Projeto encontrado em: $PROJETO"
+          test -n "$PROJETO"
+          cd "$PROJETO"
+          gradle assembleDebug
 
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: Alves-Construcoes-Gestao-APK
-          path: projeto/alves-construcoes-android-main/app/build/outputs/apk/debug/app-debug.apk
+          path: projeto/**/app/build/outputs/apk/debug/app-debug.apk
